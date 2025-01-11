@@ -19,6 +19,10 @@
       prompt: Embedding model
       default: "{{ lookup('file', '../secure/var/embedding_hf_model_name', errors='ignore') | default('intfloat/multilingual-e5-large', true) }}"
       private: false
+    - name: embedding_hf_token
+      prompt: hugging face token
+      default: "{{ lookup('file', '../secure/var/embedding_hf_token', errors='ignore') | default('NONE', true) }}"
+      private: false
 
   tasks:
     - name:  Create a folder for secure/var variables cache
@@ -33,6 +37,8 @@
       local_action: copy content={{ llm_hf_tokenizer }} dest=../secure/var/llm_hf_tokenizer
     - name: save embedding_hf_model_name
       local_action: copy content={{ embedding_hf_model_name }} dest=../secure/var/embedding_hf_model_name
+    - name: save embedding_hf_token
+      local_action: copy content={{ embedding_hf_token }} dest=../secure/var/embedding_hf_token
     - name: create a gpt configuration file
       ansible.builtin.template:
         src: gpt-settings.yaml.j2
